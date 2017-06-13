@@ -169,6 +169,9 @@ define('composer', [
 			body: data.body || '',
 			tags: data.tags || [],
 			modified: false,
+			isHotDealCategory: data.isHotDealCategory || false,
+			hotDealCategoryId: data.hotDealCategoryId || '',
+			hotDealData: data.hotDealData || null,
 			isMain: true
 		});
 	};
@@ -232,7 +235,6 @@ define('composer', [
 			if(err) {
 				return app.alertError(err.message);
 			}
-
 			push({
 				action: 'posts.edit',
 				pid: pid,
@@ -243,6 +245,8 @@ define('composer', [
 				modified: false,
 				isMain: threadData.isMain,
 				thumb: threadData.thumb,
+				hotDealData: threadData.hotDealData,
+				hotDealCategoryId: threadData.hotDealCategoryId,
 				tags: threadData.tags
 			});
 		});
@@ -375,7 +379,7 @@ define('composer', [
 		// remove when 1951 is resolved
 
 		var title = postData.title.replace(/%/g, '&#37;').replace(/,/g, '&#44;');
-
+		var isHotDeal = (postData.hotDealData && postData.hotDealData.isHotDeal) || postData.isHotDealCategory;
 		var data = {
 			title: title,
 			mobile: composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm',
@@ -389,6 +393,9 @@ define('composer', [
 			showHandleInput:  config.allowGuestHandles && (app.user.uid === 0 || (isEditing && isGuestPost && app.user.isAdmin)),
 			handle: postData ? postData.handle || '' : undefined,
 			formatting: composer.formatting,
+			hotDealData: postData.hotDealData,
+			hotDealCategoryId: postData.hotDealCategoryId,
+			showHotDealComposer: isHotDeal && (isTopic || isMain),
 			tagWhitelist: ajaxify.data.tagWhitelist
 		};
 
@@ -577,7 +584,6 @@ define('composer', [
 		}
 
 		$(window).trigger('action:composer.submit', {composerEl: postContainer, action: action, composerData: composerData});
-
 		socket.emit(action, composerData, function (err, data) {
 			postContainer.find('.composer-submit').removeAttr('disabled');
 			if (err) {

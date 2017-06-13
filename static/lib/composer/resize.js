@@ -87,7 +87,6 @@ define('composer/resize', [], function() {
 
 	resize.reposition = function(postContainer) {
 		var	ratio = getSavedRatio();
-
 		if (ratio >= 1 - snapMargin) {
 			ratio = 1;
 			postContainer.addClass('maximized');
