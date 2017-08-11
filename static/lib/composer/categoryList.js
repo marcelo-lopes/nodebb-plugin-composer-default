@@ -12,7 +12,7 @@ define('composer/categoryList', function() {
 			return;
 		}
 
-		socket.emit('plugins.ns-monfilon-theme-override.getCategoriesByPrivilegeExceptHotDeal', 'topics:create', function(err, categories) {
+		socket.emit('plugins.ns-monfilon-theme-override.getCategoriesByPrivilegeExceptCustomCategories', 'topics:create', function(err, categories) {
 			if (err) {
 				return app.alertError(err.message);
 			}

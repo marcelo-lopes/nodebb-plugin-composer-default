@@ -169,9 +169,9 @@ define('composer', [
 			body: data.body || '',
 			tags: data.tags || [],
 			modified: false,
-			isHotDealCategory: data.isHotDealCategory || false,
-			hotDealCategoryId: data.hotDealCategoryId || '',
-			hotDealData: data.hotDealData || null,
+			customCategoryType: data.customCategoryType,
+			customCategoryId: data.customCategoryId || '',
+			customData: data.customData || null,
 			isMain: true
 		});
 	};
@@ -245,8 +245,8 @@ define('composer', [
 				modified: false,
 				isMain: threadData.isMain,
 				thumb: threadData.thumb,
-				hotDealData: threadData.hotDealData,
-				hotDealCategoryId: threadData.hotDealCategoryId,
+				customData: threadData.customData,
+				customCategoryId: threadData.customCategoryId,
 				tags: threadData.tags
 			});
 		});
@@ -379,7 +379,7 @@ define('composer', [
 		// remove when 1951 is resolved
 
 		var title = postData.title.replace(/%/g, '&#37;').replace(/,/g, '&#44;');
-		var isHotDeal = (postData.hotDealData && postData.hotDealData.isHotDeal) || postData.isHotDealCategory;
+		var customDataType = (postData.customData && postData.customData.customDataType) || postData.customCategoryType;
 		var data = {
 			title: title,
 			mobile: composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm',
@@ -393,9 +393,9 @@ define('composer', [
 			showHandleInput:  config.allowGuestHandles && (app.user.uid === 0 || (isEditing && isGuestPost && app.user.isAdmin)),
 			handle: postData ? postData.handle || '' : undefined,
 			formatting: composer.formatting,
-			hotDealData: postData.hotDealData,
-			hotDealCategoryId: postData.hotDealCategoryId,
-			showHotDealComposer: isHotDeal && (isTopic || isMain),
+			customData: postData.customData,
+			customCategoryType: postData.customCategoryType,
+			customCategoryId: postData.customCategoryId,
 			tagWhitelist: ajaxify.data.tagWhitelist
 		};
 
@@ -403,7 +403,11 @@ define('composer', [
 			mobileHistoryAppend();
 		}
 
-		parseAndTranslate('composer', data, function(composerTemplate) {
+		var templateName = 'composer';
+		if(customDataType && (isTopic || isMain)) {
+			templateName = customDataType + '-composer';
+		}
+		parseAndTranslate(templateName, data, function(composerTemplate) {
 			if ($('#cmp-uuid-' + post_uuid).length) {
 				return;
 			}
