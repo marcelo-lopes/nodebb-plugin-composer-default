@@ -49,8 +49,8 @@ Sockets.push = function(socket, pid, callback) {
 					title: results.topic.title,
 					thumb: results.topic.thumb,
 					tags: results.tags,
-					hotDealData: postData.hotDealData,
-					hotDealCategoryId: postData.hotDealCategoryId,
+					customData: postData.customData,
+					customCategoryId: postData.customCategoryId,
 					isMain: results.isMain
 				});
 			});
