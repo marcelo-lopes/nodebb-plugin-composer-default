@@ -50,7 +50,7 @@ Sockets.push = function(socket, pid, callback) {
 					thumb: results.topic.thumb,
 					tags: results.tags,
 					customData: postData.customData,
-					customCategoryId: postData.customCategoryId,
+					customCategoryId: results.topic.cid,
 					isMain: results.isMain
 				});
 			});
