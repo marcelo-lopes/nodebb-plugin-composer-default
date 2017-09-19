@@ -259,6 +259,7 @@ define('composer', [
 			resize.reposition(postContainer);
 			focusElements(postContainer);
 			onShow();
+			maximiseForm(postContainer);
 		} else {
 			if (composer.formatting) {
 				createNewComposer(post_uuid);
@@ -270,6 +271,11 @@ define('composer', [
 			}
 		}
 	};
+
+	function maximiseForm(postContainer) {
+		resize.maximize(postContainer, 'maximize');
+		postContainer.addClass('maximized');
+	}
 
 	composer.enhance = function(postContainer, post_uuid, postData) {
 		/*
@@ -463,6 +469,7 @@ define('composer', [
 			scrollStop.apply(postContainer.find('.write'));
 			focusElements(postContainer);
 			onShow();
+			maximiseForm(postContainer);
 		});
 
 	}
