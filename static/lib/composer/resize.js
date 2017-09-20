@@ -52,7 +52,8 @@ define('composer/resize', [], function() {
 		if (bounds.width >= mediumMin) {
 			ratio = Math.min(Math.max(ratio, minimumRatio), 1);
 
-			var top = ratio * bounds.boundedHeight / bounds.height;
+			//var top = ratio * bounds.boundedHeight / bounds.height;
+			var top = 1;
 			elem.style.top = ((1 - top) * 100).toString() + '%';
 
 			// Add some extra space at the bottom of the body so that
