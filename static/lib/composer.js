@@ -172,6 +172,7 @@ define('composer', [
 			customCategoryType: data.customCategoryType,
 			customCategoryId: data.customCategoryId || '',
 			customData: data.customData || null,
+			userPhone: data.userPhone || '',
 			isMain: true
 		});
 	};
