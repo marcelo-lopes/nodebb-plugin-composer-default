@@ -595,7 +595,12 @@ define('composer', [
 			};
 		}
 
+		var getCheckboxValue = function (value) {
+			return _.isEqual(value, 'on');
+		};
+
 		$(window).trigger('action:composer.submit', {composerEl: postContainer, action: action, composerData: composerData});
+
 		socket.emit(action, composerData, function (err, data) {
 			postContainer.find('.composer-submit').removeAttr('disabled');
 			if (err) {
@@ -610,8 +615,10 @@ define('composer', [
 			drafts.removeDraft(postData.save_id);
 
 			if (action === 'topics.post') {
+				sendAnalyticsEventWithTrialFlag ('Post a deal');
 				ajaxify.go('topic/' + data.slug, undefined, (onComposeRoute || composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm') ? true : false);
 			} else if (action === 'posts.reply') {
+				sendAnalyticsEventWithTrialFlag ('Reply to a deal');
 				if (onComposeRoute || composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm') {
 					window.history.back();
 				} else if (ajaxify.data.template.topic) {
@@ -622,7 +629,14 @@ define('composer', [
 				} else {
 					ajaxify.go('post/' + data.pid);
 				}
-			} else {
+			} else if (action === 'posts.edit') {
+				var archivedCheckBoxState = composerData && composerData.customData ? _.find (composerData.customData, {name: 'archived'}) : null;
+				if (postData && postData.customData && !postData.customData.archived && archivedCheckBoxState && getCheckboxValue (archivedCheckBoxState.value)) {
+					sendAnalyticsEventWithTrialFlag ('Set as not available');
+				}
+				removeComposerHistory();
+			}
+			else {
 				removeComposerHistory();
 			}
 
