@@ -615,10 +615,24 @@ define('composer', [
 			drafts.removeDraft(postData.save_id);
 
 			if (action === 'topics.post') {
-				sendAnalyticsEventWithTrialFlag ('Post a deal');
+				if (config) {
+					if (config.hotDealCategoryId === data.cid ) {
+						sendAnalyticsEventWithTrialFlag ('Post a deal');
+					}
+					else if (config.lookingForPartnerCategoryId === data.cid) {
+						sendAnalyticsEventWithTrialFlag ('Post a Partner post');
+					}
+				}
 				ajaxify.go('topic/' + data.slug, undefined, (onComposeRoute || composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm') ? true : false);
 			} else if (action === 'posts.reply') {
-				sendAnalyticsEventWithTrialFlag ('Reply to a deal');
+				if (config) {
+					if (config.hotDealCategoryId === data.cid ) {
+						sendAnalyticsEventWithTrialFlag ('Reply to a deal');
+					}
+					else if (config.lookingForPartnerCategoryId === data.cid) {
+						sendAnalyticsEventWithTrialFlag ('Reply to a Partner post');
+					}
+				}
 				if (onComposeRoute || composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm') {
 					window.history.back();
 				} else if (ajaxify.data.template.topic) {
